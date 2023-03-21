@@ -37,12 +37,12 @@ jobs:
       - name: Cache turbo build setup
         uses: actions/cache@v3
         with:
-          path: .turbo
+          path: node_modules/.cache/turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
       - name: Lint
-        run: yarn lint --cache-dir=.turbo
+        run: yarn lint
       - name: Build
-        run: yarn build --cache-dir=.turbo
+        run: yarn build
