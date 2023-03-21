@@ -34,13 +34,15 @@ jobs:
         env:
           CI: true
 
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v2
+      - name: Cache turbo build setup
+        uses: actions/cache@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Lint
-        run: yarn lint --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: yarn lint --cache-dir=.turbo
       - name: Build
-        run: yarn build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: yarn build --cache-dir=.turbo
